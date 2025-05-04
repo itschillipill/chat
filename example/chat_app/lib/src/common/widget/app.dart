@@ -1,4 +1,5 @@
 import 'package:chatapp/src/common/localization/localization.dart';
+import 'package:chatapp/src/common/theme/theme.dart';
 import 'package:chatapp/src/common/widget/window_scope.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -21,9 +22,9 @@ class App extends StatelessWidget {
           Localization.delegate,
         ],
         theme: View.of(context).platformDispatcher.platformBrightness == Brightness.dark
-            ? ThemeData.dark(useMaterial3: true)
-            : ThemeData.light(useMaterial3: true), // TODO(plugfox): implement theme
-        home: const Placeholder(),
+            ? AppTheme.darkTheme
+            : AppTheme.lightTheme,
+        home:const Placeholder(),
         supportedLocales: Localization.supportedLocales,
         locale: const Locale('en', 'US'), // TODO(plugfox): implement locale
         builder: (context, child) => MediaQuery(

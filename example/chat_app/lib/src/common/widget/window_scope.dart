@@ -91,6 +91,13 @@ class _WindowTitleState extends State<_WindowTitle> with WindowListener {
     }).ignore();
   }
 
+  void setFullScreen(bool value) {
+    Future<void>(() async {
+      await windowManager.setFullScreen(value);
+      _isFullScreen.value = await windowManager.isFullScreen();
+    }).ignore();
+  }
+
   @override
   Widget build(BuildContext context) => SizedBox(
         height: 24,
@@ -134,6 +141,7 @@ class _WindowTitleState extends State<_WindowTitle> with WindowListener {
                   isFullScreen: _isFullScreen,
                   isAlwaysOnTop: _isAlwaysOnTop,
                   setAlwaysOnTop: setAlwaysOnTop,
+                  setFullScreen: setFullScreen,
                 ),
               ],
             ),
@@ -143,11 +151,12 @@ class _WindowTitleState extends State<_WindowTitle> with WindowListener {
 }
 
 class _WindowButtons$Windows extends StatelessWidget {
-  const _WindowButtons$Windows({
-    required ValueListenable<bool> isFullScreen,
-    required ValueListenable<bool> isAlwaysOnTop,
-    required this.setAlwaysOnTop,
-  })  : _isFullScreen = isFullScreen,
+  const _WindowButtons$Windows(
+      {required ValueListenable<bool> isFullScreen,
+      required ValueListenable<bool> isAlwaysOnTop,
+      required this.setAlwaysOnTop,
+      required this.setFullScreen})
+      : _isFullScreen = isFullScreen,
         _isAlwaysOnTop = isAlwaysOnTop;
 
   // ignore: unused_field
@@ -155,6 +164,7 @@ class _WindowButtons$Windows extends StatelessWidget {
   final ValueListenable<bool> _isAlwaysOnTop;
 
   final ValueChanged<bool> setAlwaysOnTop;
+  final ValueChanged<bool> setFullScreen;
 
   @override
   Widget build(BuildContext context) => Align(
@@ -172,14 +182,14 @@ class _WindowButtons$Windows extends StatelessWidget {
                 icon: isAlwaysOnTop ? Icons.push_pin : Icons.push_pin_outlined,
               ),
             ),
-
             // Minimize
             _WindowButton(
               onPressed: () => windowManager.minimize(),
               icon: Icons.minimize,
             ),
 
-            /* ValueListenableBuilder<bool>(
+            /* // Set Full Screen
+            ValueListenableBuilder<bool>(
               valueListenable: _isFullScreen,
               builder: (context, isFullScreen, _) => _WindowButton(
                     onPressed: () => windowManager.setFullScreen(!isFullScreen),
